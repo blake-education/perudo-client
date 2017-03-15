@@ -1,0 +1,6 @@
+# Elm generated
+elm-stuff/
+repl-temp-*
+
+# Editors
+.idea
