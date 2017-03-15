@@ -5,11 +5,22 @@ type alias CupOfDice =
     List Int
 
 
-type alias GameState =
+type alias Game =
+    { gameState : Maybe GameState
+    , cup : Maybe CupOfDice
+    , id : Int
+    }
+
+
+type GameState
+    = Server ServerState
+    | Round RoundResult
+
+
+type alias ServerState =
     { players : List Player
     , currentBid : Bid
     , currentPlayer : Int
-    , cup : Maybe CupOfDice
     }
 
 
@@ -34,6 +45,9 @@ type alias Player =
 
 
 type Msg
-    = Increment Int
-    | Decrement Int
-    | UpdateAmount String
+    = CallLiar Int
+    | MakeBid Bid
+    | GetCup
+    | SetCup CupOfDice
+    | NextServerState ServerState
+    | RoundFinished RoundResult
