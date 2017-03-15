@@ -35,6 +35,7 @@ initialModel =
     ( { players = [ Player "Joe" 6, Player "Mario" 6, Player "Kartik" 6 ]
       , currentBid = Bid 2 2
       , currentPlayer = 0
+      , cup = Nothing
       }
     , Cmd.none
     )
