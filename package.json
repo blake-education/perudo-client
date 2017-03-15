@@ -1,0 +1,31 @@
+{
+  "name": "perudo-client",
+  "version": "1.0.0",
+  "description": "Perudo / Liar's dice client",
+  "scripts": {
+    "start": "webpack-dev-server -d --profile --progress --watch --inline --hot --content-base src/",
+    "build": "NODE_ENV=prod webpack",
+    "build:watch": "npm run build -- --watch",
+    "prebuild": "npm run clean",
+    "clean": "rimraf dist",
+    "postinstall": "elm package install -y"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blake-education/perudo-client.git"
+  },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.0.1",
+    "elm": "^0.18.0",
+    "elm-hot-loader": "^0.5.4",
+    "elm-webpack-loader": "^4.2.0",
+    "html-webpack-plugin": "^2.28.0",
+    "rimraf": "^2.6.1",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.2",
+    "webpack-merge": "^4.0.0"
+  }
+}

@@ -2,5 +2,12 @@
 elm-stuff/
 repl-temp-*
 
+# Node/npm generated
+node_modules/
+npm-debug.log
+
+# Project generated
+dist/
+
 # Editors
 .idea
