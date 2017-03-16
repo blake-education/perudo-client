@@ -1,0 +1,1 @@
+- add initial table module for rendering the table of the game

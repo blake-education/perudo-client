@@ -1,5 +1,7 @@
 module Types exposing (..)
 
+import Table
+
 
 type alias CupOfDice =
     List Int
@@ -51,3 +53,4 @@ type Msg
     | SetCup CupOfDice
     | NextServerState ServerState
     | RoundFinished RoundResult
+    | TableMsg Table.Msg
