@@ -14,10 +14,6 @@ import TableMsg exposing (Msg(..))
 import Dice
 
 
-type alias AppMsg =
-    Types.Msg
-
-
 type alias PlayerName =
     String
 
@@ -71,7 +67,7 @@ testPlayers =
     [ TablePlayer 1 "Joe" 6, TablePlayer 2 "Garrett" 5 ]
 
 
-view : (Msg -> AppMsg) -> Model -> Html AppMsg
+view : (Msg -> msg) -> Model -> Html msg
 view privateMsg { tablePlayers } =
     div []
         [ button [ onClick <| privateMsg CallLiar ] [ text "Liar!" ]
@@ -79,7 +75,7 @@ view privateMsg { tablePlayers } =
         ]
 
 
-playersView : TablePlayers -> Html AppMsg
+playersView : TablePlayers -> Html msg
 playersView tablePlayers =
     div [] <|
         List.map
@@ -87,7 +83,7 @@ playersView tablePlayers =
             tablePlayers
 
 
-playerView : TablePlayer -> Html AppMsg
+playerView : TablePlayer -> Html msg
 playerView { id, name, diceCount } =
     div []
         [ text name
