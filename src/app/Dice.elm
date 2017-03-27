@@ -1,7 +1,8 @@
 module Dice exposing (emptyCup, Cup, cupFromIntList, viewDie, viewCup, describeCount)
 
-import Html.Attributes exposing (..)
-import Html exposing (..)
+import Html exposing (Html)
+import Svg exposing (..)
+import Svg.Attributes exposing (..)
 
 
 type alias Die =
@@ -24,23 +25,46 @@ cupFromIntList =
 
 viewDie : Die -> Html msg
 viewDie die =
-    div
-        [ style
-            [ ( "border", "2px solid black" )
-            , ( "width", "50px" )
-            , ( "height", "50px" )
-            , ( "padding", "5px" )
-            , ( "margin", "5px" )
-            , ( "display", "inline-block" )
-            , ( "text-align", "center" )
+    svg [ viewBox "0 0 300 300", width "100px", height "100px" ]
+        [ Svg.rect
+            [ x "50"
+            , y "50"
+            , rx "10"
+            , ry "10"
+            , width "150"
+            , height "150"
+            , fill "#cce"
+            , stroke "black"
+            , strokeWidth "4"
             ]
+            [ Svg.animate
+                [ id "anim1"
+                , attributeName "fill"
+                , from "#cfc"
+                , to "#ccf"
+                , dur "10s"
+                , begin "0s; anim2.end"
+                ]
+                []
+            , Svg.animate
+                [ id "anim2"
+                , attributeName "fill"
+                , from "#ccf"
+                , to "#cfc"
+                , dur "10s"
+                , begin "anim1.end"
+                ]
+                []
+            ]
+        , Svg.text_
+            [ x "110", y "140", fontSize "50px", fontFamily "verdana", fontWeight "100" ]
+            [ Svg.text (toString die) ]
         ]
-        [ text <| toString die ]
 
 
 viewCup : Cup -> Html msg
 viewCup cup =
-    div [] <|
+    Html.div [] <|
         List.map viewDie cup
 
 
