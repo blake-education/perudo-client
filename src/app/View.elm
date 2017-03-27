@@ -1,6 +1,7 @@
 module View exposing (..)
 
 import Types exposing (..)
+import Dice exposing (Cup)
 import Html exposing (..)
 import Table
 
@@ -19,7 +20,7 @@ root model =
           --            [ text ("FaceValue: " ++ toString model.currentBid.faceValue) ]
           --        , p []
           --            [ text ("Player: " ++ firstPlayer model.players) ]
-        , tableView
+        , tableView [] []
         ]
 
 
@@ -33,6 +34,17 @@ firstPlayer players =
             "No Players Found"
 
 
-tableView : Html Msg
-tableView =
-    Html.map TableMsg (Table.view Table.init)
+tableView : List Player -> Dice.Cup -> Html Msg
+tableView players cup =
+    let
+        -- we have to fake ids until we have them
+        idAndPlayerTo3Tuple id { playerName, diceCount } =
+            ( id, playerName, diceCount )
+
+        ids =
+            List.range 1 <| List.length players
+
+        playersTuples =
+            List.map2 idAndPlayerTo3Tuple ids players
+    in
+        Table.view Types.TableAction <| Table.initWithPlayersAndCup playersTuples cup

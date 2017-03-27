@@ -1,15 +1,16 @@
 module Types exposing (..)
 
-import Table
+import TableMsg
+import Dice
 
 
-type alias CupOfDice =
-    List Int
+type alias PlayerID =
+    Int
 
 
 type alias Game =
     { gameState : Maybe GameState
-    , cup : Maybe CupOfDice
+    , cup : Maybe Dice.Cup
     , id : Int
     }
 
@@ -50,7 +51,7 @@ type Msg
     = CallLiar Int
     | MakeBid Bid
     | GetCup
-    | SetCup CupOfDice
+    | SetCup Dice.Cup
     | NextServerState ServerState
     | RoundFinished RoundResult
-    | TableMsg Table.Msg
+    | TableAction TableMsg.Msg
