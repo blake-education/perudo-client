@@ -1,4 +1,4 @@
-module Table exposing (view, init, initWithPlayersAndCup)
+module Table exposing (view, init, fromPlayersAndCup)
 
 {-|
 
@@ -8,14 +8,11 @@ module Table exposing (view, init, initWithPlayersAndCup)
 -}
 
 import Html exposing (..)
+import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Types exposing (PlayerID)
+import Types exposing (PlayerID, PlayerName)
 import TableMsg exposing (Msg(..))
 import Dice
-
-
-type alias PlayerName =
-    String
 
 
 type alias DiceCount =
@@ -46,8 +43,8 @@ init =
     }
 
 
-initWithPlayersAndCup : List ( Int, String, Int ) -> List Int -> Model
-initWithPlayersAndCup tuples cup =
+fromPlayersAndCup : List ( Int, String, Int ) -> List Int -> Model
+fromPlayersAndCup tuples cup =
     let
         tupleToPlayer ( id, name, diceCount ) =
             { id = id, name = name, diceCount = diceCount }
@@ -68,11 +65,18 @@ testPlayers =
 
 
 view : (Msg -> msg) -> Model -> Html msg
-view privateMsg { tablePlayers } =
+view privateMsg { tablePlayers, myCup } =
     div []
-        [ button [ onClick <| privateMsg CallLiar ] [ text "Liar!" ]
+        [ h3 [] [ text "Players" ]
         , playersView tablePlayers
+        , liarButton privateMsg
+        , h3 [] [ text "My Cup" ]
+        , Dice.viewCup myCup
         ]
+
+
+liarButton privateMsg =
+    button [ onClick <| privateMsg CallLiar ] [ text "Call Liar!" ]
 
 
 playersView : TablePlayers -> Html msg
@@ -85,7 +89,15 @@ playersView tablePlayers =
 
 playerView : TablePlayer -> Html msg
 playerView { id, name, diceCount } =
-    div []
-        [ text name
-        , text (toString diceCount)
+    div
+        [ style
+            [ ( "border", "1px solid green" )
+            , ( "width", "200px" )
+            , ( "padding", "10px" )
+            , ( "margin", "8px" )
+            , ( "display", "inline-block" )
+            ]
+        ]
+        [ div [] [ text name ]
+        , div [] [ text <| Dice.describeCount diceCount ]
         ]

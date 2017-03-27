@@ -8,6 +8,10 @@ type alias PlayerID =
     Int
 
 
+type alias PlayerName =
+    String
+
+
 type alias Game =
     { gameState : Maybe GameState
     , cup : Maybe Dice.Cup
@@ -42,7 +46,7 @@ type alias Bid =
 
 
 type alias Player =
-    { playerName : String
+    { playerName : PlayerName
     , diceCount : Int
     }
 
