@@ -20,7 +20,14 @@ root model =
           --            [ text ("FaceValue: " ++ toString model.currentBid.faceValue) ]
           --        , p []
           --            [ text ("Player: " ++ firstPlayer model.players) ]
-        , tableView [] []
+        , tableView
+            2
+            [ Player "Joe" 6
+            , Player "Garrett" 2
+            , Player "Martin" 6
+            , Player "Julian" 0
+            ]
+            [ 1, 2, 5, 4, 1, 6 ]
         ]
 
 
@@ -34,8 +41,8 @@ firstPlayer players =
             "No Players Found"
 
 
-tableView : List Player -> Dice.Cup -> Html Msg
-tableView players cup =
+tableView : Int -> List Player -> Dice.Cup -> Html Msg
+tableView currentPlayerIndex players cup =
     let
         -- we have to fake ids until we have them
         idAndPlayerTo3Tuple id { playerName, diceCount } =
@@ -47,4 +54,4 @@ tableView players cup =
         playersTuples =
             List.map2 idAndPlayerTo3Tuple ids players
     in
-        Table.view Types.TableAction <| Table.initWithPlayersAndCup playersTuples cup
+        Table.view Types.TableAction <| Table.fromPlayersAndCup playersTuples cup
