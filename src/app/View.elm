@@ -44,14 +44,11 @@ firstPlayer players =
 tableView : Int -> List Player -> Dice.Cup -> Html Msg
 tableView currentPlayerIndex players cup =
     let
-        -- we have to fake ids until we have them
-        idAndPlayerTo3Tuple id { playerName, diceCount } =
-            ( id, playerName, diceCount )
+        tupleFromPlayer { playerName, diceCount } =
+            ( playerName, diceCount )
 
-        ids =
-            List.range 1 <| List.length players
-
-        playersTuples =
-            List.map2 idAndPlayerTo3Tuple ids players
+        playerTuples =
+            List.map tupleFromPlayer players
     in
-        Table.view Types.TableAction <| Table.fromPlayersAndCup playersTuples cup
+        Table.view Types.TableAction <|
+            Table.fromPlayerTuplesCurrentAndCup playerTuples currentPlayerIndex cup

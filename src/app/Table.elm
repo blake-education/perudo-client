@@ -1,4 +1,4 @@
-module Table exposing (view, init, fromPlayersAndCup)
+module Table exposing (view, init, fromPlayerTuplesCurrentAndCup)
 
 {-|
 
@@ -13,6 +13,7 @@ import Html.Events exposing (..)
 import Types exposing (PlayerID, PlayerName)
 import TableMsg exposing (Msg(..))
 import Dice
+import Identicon exposing (identicon)
 
 
 type alias DiceCount =
@@ -20,8 +21,7 @@ type alias DiceCount =
 
 
 type alias TablePlayer =
-    { id : PlayerID
-    , name : PlayerName
+    { name : PlayerName
     , diceCount : DiceCount
     }
 
@@ -33,6 +33,7 @@ type alias TablePlayers =
 type alias Model =
     { tablePlayers : TablePlayers
     , myCup : Dice.Cup
+    , currentPlayerIndex : Int
     }
 
 
@@ -40,17 +41,19 @@ init : Model
 init =
     { tablePlayers = noPlayers
     , myCup = Dice.emptyCup
+    , currentPlayerIndex = 0
     }
 
 
-fromPlayersAndCup : List ( Int, String, Int ) -> List Int -> Model
-fromPlayersAndCup tuples cup =
+fromPlayerTuplesCurrentAndCup : List ( String, Int ) -> Int -> List Int -> Model
+fromPlayerTuplesCurrentAndCup tuples currentPlayerIndex cup =
     let
-        tupleToPlayer ( id, name, diceCount ) =
-            { id = id, name = name, diceCount = diceCount }
+        tupleToPlayer ( name, diceCount ) =
+            { name = name, diceCount = diceCount }
     in
         { tablePlayers = List.map tupleToPlayer tuples
         , myCup = Dice.cupFromIntList cup
+        , currentPlayerIndex = currentPlayerIndex
         }
 
 
@@ -59,16 +62,11 @@ noPlayers =
     []
 
 
-testPlayers : TablePlayers
-testPlayers =
-    [ TablePlayer 1 "Joe" 6, TablePlayer 2 "Garrett" 5 ]
-
-
 view : (Msg -> msg) -> Model -> Html msg
-view privateMsg { tablePlayers, myCup } =
+view privateMsg { tablePlayers, myCup, currentPlayerIndex } =
     div []
         [ h3 [] [ text "Players" ]
-        , playersView tablePlayers
+        , playersView tablePlayers currentPlayerIndex
         , liarButton privateMsg
         , h3 [] [ text "My Cup" ]
         , Dice.viewCup myCup
@@ -79,25 +77,46 @@ liarButton privateMsg =
     button [ onClick <| privateMsg CallLiar ] [ text "Call Liar!" ]
 
 
-playersView : TablePlayers -> Html msg
-playersView tablePlayers =
+playersView : TablePlayers -> Int -> Html msg
+playersView tablePlayers currentPlayerIndex =
     div [] <|
-        List.map
-            playerView
+        List.indexedMap
+            (\index player -> playerView player (currentPlayerIndex == index))
             tablePlayers
 
 
-playerView : TablePlayer -> Html msg
-playerView { id, name, diceCount } =
-    div
-        [ style
-            [ ( "border", "1px solid green" )
-            , ( "width", "200px" )
-            , ( "padding", "10px" )
-            , ( "margin", "8px" )
-            , ( "display", "inline-block" )
+playerView : TablePlayer -> Bool -> Html msg
+playerView { name, diceCount } isCurrentPlayer =
+    let
+        backgroundColourOfCurrentPlayer =
+            if isCurrentPlayer then
+                "#0f0"
+            else
+                "#cfc"
+    in
+        div
+            [ style
+                [ ( "border", "5px solid #262" )
+                , ( "width", "200px" )
+                , ( "background-color", backgroundColourOfCurrentPlayer )
+                , ( "padding", "10px" )
+                , ( "margin", "8px" )
+                , ( "display", "inline-block" )
+                ]
             ]
-        ]
-        [ div [] [ text name ]
-        , div [] [ text <| Dice.describeCount diceCount ]
+            [ div [ iconStyle ] [ identicon "50px" name ]
+            , div [] [ text name ]
+            , div [] [ text <| Dice.describeCount diceCount ]
+            ]
+
+
+iconStyle : Attribute msg
+iconStyle =
+    style
+        [ ( "width", "50px" )
+        , ( "height", "50px" )
+        , ( "padding", "10px 0" )
+        , ( "margin", "auto" )
+        , ( "font-size", "2em" )
+        , ( "text-align", "center" )
         ]

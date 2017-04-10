@@ -59,3 +59,7 @@ type Msg
     | NextServerState ServerState
     | RoundFinished RoundResult
     | TableAction TableMsg.Msg
+
+
+makeCallLiarMsg =
+    CallLiar
