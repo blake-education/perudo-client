@@ -67,14 +67,9 @@ view privateMsg { tablePlayers, myCup, currentPlayerIndex } =
     div []
         [ h3 [] [ text "Players" ]
         , playersView tablePlayers currentPlayerIndex
-        , liarButton privateMsg
         , h3 [] [ text "My Cup" ]
         , Dice.viewCup myCup
         ]
-
-
-liarButton privateMsg =
-    button [ onClick <| privateMsg CallLiar ] [ text "Call Liar!" ]
 
 
 playersView : TablePlayers -> Int -> Html msg
@@ -93,6 +88,12 @@ playerView { name, diceCount } isCurrentPlayer =
                 "#0f0"
             else
                 "#cfc"
+
+        optionalLiarButtonDiv =
+            if isCurrentPlayer then
+                [ div [] [ liarButton name ] ]
+            else
+                []
     in
         div
             [ style
@@ -104,10 +105,18 @@ playerView { name, diceCount } isCurrentPlayer =
                 , ( "display", "inline-block" )
                 ]
             ]
-            [ div [ iconStyle ] [ identicon "50px" name ]
-            , div [] [ text name ]
-            , div [] [ text <| Dice.describeCount diceCount ]
-            ]
+            ([ div [ iconStyle ] [ identicon "50px" name ]
+             , div [] [ text name ]
+             , div [] [ text <| Dice.describeCount diceCount ]
+             ]
+                ++ optionalLiarButtonDiv
+            )
+
+
+liarButton name =
+    button
+        []
+        [ text <| "Call " ++ name ++ " a Liar!" ]
 
 
 iconStyle : Attribute msg
