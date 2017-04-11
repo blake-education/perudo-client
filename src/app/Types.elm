@@ -57,7 +57,3 @@ type Msg
     | SetCup Dice.Cup
     | NextServerState ServerState
     | RoundFinished RoundResult
-
-
-makeCallLiarMsg =
-    CallLiar
