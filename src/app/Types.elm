@@ -1,6 +1,5 @@
 module Types exposing (..)
 
-import TableMsg
 import Dice
 
 
@@ -58,7 +57,6 @@ type Msg
     | SetCup Dice.Cup
     | NextServerState ServerState
     | RoundFinished RoundResult
-    | TableAction TableMsg.Msg
 
 
 makeCallLiarMsg =

@@ -1,4 +1,4 @@
-module Table exposing (view, init, fromPlayerTuplesCurrentAndCup)
+module Table exposing (view, emptyState)
 
 {-|
 
@@ -11,7 +11,6 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Types exposing (PlayerID, PlayerName)
-import TableMsg exposing (Msg(..))
 import Dice
 import Identicon exposing (identicon)
 
@@ -21,7 +20,8 @@ type alias DiceCount =
 
 
 type alias TablePlayer =
-    { name : PlayerName
+    { id : Int
+    , name : PlayerName
     , diceCount : DiceCount
     }
 
@@ -30,31 +30,19 @@ type alias TablePlayers =
     List TablePlayer
 
 
-type alias Model =
+type alias State =
     { tablePlayers : TablePlayers
     , myCup : Dice.Cup
-    , currentPlayerIndex : Int
+    , currentPlayerId : Int
     }
 
 
-init : Model
-init =
+emptyState : State
+emptyState =
     { tablePlayers = noPlayers
     , myCup = Dice.emptyCup
-    , currentPlayerIndex = 0
+    , currentPlayerId = 0
     }
-
-
-fromPlayerTuplesCurrentAndCup : List ( String, Int ) -> Int -> List Int -> Model
-fromPlayerTuplesCurrentAndCup tuples currentPlayerIndex cup =
-    let
-        tupleToPlayer ( name, diceCount ) =
-            { name = name, diceCount = diceCount }
-    in
-        { tablePlayers = List.map tupleToPlayer tuples
-        , myCup = Dice.cupFromIntList cup
-        , currentPlayerIndex = currentPlayerIndex
-        }
 
 
 noPlayers : TablePlayers
@@ -62,11 +50,11 @@ noPlayers =
     []
 
 
-view : (Msg -> msg) -> Model -> Html msg
-view privateMsg { tablePlayers, myCup, currentPlayerIndex } =
+view : State -> Html msg
+view { tablePlayers, myCup, currentPlayerId } =
     div []
         [ h3 [] [ text "Players" ]
-        , playersView tablePlayers currentPlayerIndex
+        , playersView tablePlayers currentPlayerId
         , h3 [] [ text "My Cup" ]
         , Dice.viewCup myCup
         ]

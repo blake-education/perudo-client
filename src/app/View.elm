@@ -42,13 +42,12 @@ firstPlayer players =
 
 
 tableView : Int -> List Player -> Dice.Cup -> Html Msg
-tableView currentPlayerIndex players cup =
+tableView currentPlayerId players cup =
     let
-        tupleFromPlayer { playerName, diceCount } =
-            ( playerName, diceCount )
+        playerToTablePlayer id { playerName, diceCount } =
+            { id = id, name = playerName, diceCount = diceCount }
 
-        playerTuples =
-            List.map tupleFromPlayer players
+        tablePlayers =
+            List.indexedMap playerToTablePlayer players
     in
-        Table.view Types.TableAction <|
-            Table.fromPlayerTuplesCurrentAndCup playerTuples currentPlayerIndex cup
+        Table.view { tablePlayers = tablePlayers, myCup = cup, currentPlayerId = currentPlayerId }
