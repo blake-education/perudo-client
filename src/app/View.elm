@@ -22,10 +22,10 @@ root model =
           --            [ text ("Player: " ++ firstPlayer model.players) ]
         , tableView
             2
-            [ Player "Joe" 6
-            , Player "Garrett" 2
-            , Player "Martin" 6
-            , Player "Julian" 0
+            [ Player "Tessa" 6
+            , Player "Raul" 2
+            , Player "Tracey" 6
+            , Player "Casper" 0
             ]
             [ 1, 2, 5, 4, 1, 6 ]
         ]
