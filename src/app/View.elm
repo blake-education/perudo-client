@@ -49,5 +49,15 @@ tableView currentPlayerId players cup =
 
         tablePlayers =
             List.indexedMap playerToTablePlayer players
+
+        tableState =
+            { tablePlayers = tablePlayers
+            , myCup = cup
+            , currentPlayerId = currentPlayerId
+            }
+
+        tableConfig =
+            { callLiar = CallLiar
+            }
     in
-        Table.view { tablePlayers = tablePlayers, myCup = cup, currentPlayerId = currentPlayerId }
+        Table.view tableConfig tableState

@@ -1,4 +1,4 @@
-module Table exposing (view, emptyState)
+module Table exposing (view, emptyState, TableConfig)
 
 {-|
 
@@ -26,6 +26,11 @@ type alias TablePlayer =
     }
 
 
+type alias TableConfig msg =
+    { callLiar : Int -> msg
+    }
+
+
 type alias TablePlayers =
     List TablePlayer
 
@@ -50,26 +55,26 @@ noPlayers =
     []
 
 
-view : State -> Html msg
-view { tablePlayers, myCup, currentPlayerId } =
+view : TableConfig msg -> State -> Html msg
+view tableConfig { tablePlayers, myCup, currentPlayerId } =
     div []
         [ h3 [] [ text "Players" ]
-        , playersView tablePlayers currentPlayerId
+        , playersView tableConfig tablePlayers currentPlayerId
         , h3 [] [ text "My Cup" ]
         , Dice.viewCup myCup
         ]
 
 
-playersView : TablePlayers -> Int -> Html msg
-playersView tablePlayers currentPlayerIndex =
+playersView : TableConfig msg -> TablePlayers -> Int -> Html msg
+playersView tableConfig tablePlayers currentPlayerId =
     div [] <|
         List.indexedMap
-            (\index player -> playerView player (currentPlayerIndex == index))
+            (\index player -> playerView tableConfig player (currentPlayerId == index))
             tablePlayers
 
 
-playerView : TablePlayer -> Bool -> Html msg
-playerView { name, diceCount } isCurrentPlayer =
+playerView : TableConfig msg -> TablePlayer -> Bool -> Html msg
+playerView { callLiar } { id, name, diceCount } isCurrentPlayer =
     let
         backgroundColourOfCurrentPlayer =
             if isCurrentPlayer then
@@ -79,7 +84,7 @@ playerView { name, diceCount } isCurrentPlayer =
 
         optionalLiarButtonDiv =
             if isCurrentPlayer then
-                [ div [] [ liarButton name ] ]
+                [ div [ onClick <| callLiar id ] [ liarButton name ] ]
             else
                 []
     in
