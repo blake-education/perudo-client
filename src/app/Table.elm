@@ -68,8 +68,8 @@ view tableConfig { tablePlayers, myCup, currentPlayerId } =
 playersView : TableConfig msg -> TablePlayers -> Int -> Html msg
 playersView tableConfig tablePlayers currentPlayerId =
     div [] <|
-        List.indexedMap
-            (\index player -> playerView tableConfig player (currentPlayerId == index))
+        List.map
+            (\player -> playerView tableConfig player (currentPlayerId == player.id))
             tablePlayers
 
 
