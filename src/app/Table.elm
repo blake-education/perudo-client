@@ -20,14 +20,14 @@ type alias DiceCount =
 
 
 type alias TablePlayer =
-    { id : Int
+    { id : PlayerID
     , name : PlayerName
     , diceCount : DiceCount
     }
 
 
 type alias TableConfig msg =
-    { callLiar : Int -> msg
+    { callLiar : PlayerID -> msg
     }
 
 
@@ -38,7 +38,7 @@ type alias TablePlayers =
 type alias State =
     { tablePlayers : TablePlayers
     , myCup : Dice.Cup
-    , currentPlayerId : Int
+    , currentPlayerId : PlayerID
     }
 
 
@@ -65,7 +65,7 @@ view tableConfig { tablePlayers, myCup, currentPlayerId } =
         ]
 
 
-playersView : TableConfig msg -> TablePlayers -> Int -> Html msg
+playersView : TableConfig msg -> TablePlayers -> PlayerID -> Html msg
 playersView tableConfig tablePlayers currentPlayerId =
     div [] <|
         List.map
