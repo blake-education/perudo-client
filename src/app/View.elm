@@ -22,10 +22,10 @@ root model =
           --            [ text ("Player: " ++ firstPlayer model.players) ]
         , tableView
             2
-            [ Player "Joe" 6
-            , Player "Garrett" 2
-            , Player "Martin" 6
-            , Player "Julian" 0
+            [ Player "Tessa" 6
+            , Player "Raul" 2
+            , Player "Tracey" 6
+            , Player "Casper" 0
             ]
             [ 1, 2, 5, 4, 1, 6 ]
         ]
@@ -42,16 +42,22 @@ firstPlayer players =
 
 
 tableView : Int -> List Player -> Dice.Cup -> Html Msg
-tableView currentPlayerIndex players cup =
+tableView currentPlayerId players cup =
     let
-        -- we have to fake ids until we have them
-        idAndPlayerTo3Tuple id { playerName, diceCount } =
-            ( id, playerName, diceCount )
+        playerToTablePlayer id { playerName, diceCount } =
+            { id = id, name = playerName, diceCount = diceCount }
 
-        ids =
-            List.range 1 <| List.length players
+        tablePlayers =
+            List.indexedMap playerToTablePlayer players
 
-        playersTuples =
-            List.map2 idAndPlayerTo3Tuple ids players
+        tableState =
+            { tablePlayers = tablePlayers
+            , myCup = cup
+            , currentPlayerId = currentPlayerId
+            }
+
+        tableConfig =
+            { callLiar = CallLiar
+            }
     in
-        Table.view Types.TableAction <| Table.fromPlayersAndCup playersTuples cup
+        Table.view tableConfig tableState
